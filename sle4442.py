@@ -17,9 +17,6 @@ CAMBIA_PIN = [0xFF, 0xD2, 0x00, 0x01, 0x03] # aggiungi PIN
 LEGGI_PROT = [0xFF, 0xB2, 0x00, 0x00, 0x04]
 
 PIN = ''
-CONTENUTO = []
-for i in range (255):
-    CONTENUTO.append(None)
 
 
 class MyUi(QtGui.QMainWindow):
@@ -95,20 +92,6 @@ class MyUi(QtGui.QMainWindow):
         except Exception, message:
             print "Exception:", message
 
-    def leggi(self):
-        try:
-            hresult, response = SCardTransmit(self.hcard, self.dwActiveProtocol, LEGGI + [self.ui.leggi_inizio.value(), self.ui.leggi_n_bytes.value()])
-            if hresult != SCARD_S_SUCCESS:
-                raise Exception('Failed to transmit: ' + SCardGetErrorMessage(hresult))
-            print 'Contenuto della memoria: ' + smartcard.util.toHexString(response[0:-2], smartcard.util.HEX)
-            #print 'Command: ' + smartcard.util.toASCIIString(response)
-            print "letti " + str(len(response)-2) + " bytes"
-            CONTENUTO[self.ui.leggi_inizio.value():self.ui.leggi_inizio.value()+self.ui.leggi_n_bytes.value()] = response[0:-2]
-            print CONTENUTO
-            if (response[-2] == 144):
-                print "OK!"
-        except Exception, message:
-            print "Exception:", message
 
     def proteggi_byte(self):
         try:
